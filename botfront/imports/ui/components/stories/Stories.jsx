@@ -1,3 +1,4 @@
+import { DragDropContext } from 'react-beautiful-dnd';
 import { Grid, Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -63,6 +64,10 @@ class Stories extends React.Component {
         });
     };
 
+    handleDragEnd = (result) => {
+        console.log(result);
+    }
+
     handleSavingStories = () => {
         this.setState({ saving: true });
     };
@@ -107,40 +112,42 @@ class Stories extends React.Component {
         const { storyIndex, saving, validationErrors } = this.state;
         return (
             <Grid className='stories-container'>
-                <Grid.Column width={4}>
-                    {validationErrors && (
-                        <Message
-                            warning
-                            content="Your changes haven't been saved. Correct errors first."
+                <DragDropContext onDragEnd={this.handleDragEnd}>
+                    <Grid.Column width={4}>
+                        {validationErrors && (
+                            <Message
+                                warning
+                                content="Your changes haven't been saved. Correct errors first."
+                            />
+                        )}
+                        <ItemsBrowser
+                            data={storyGroups}
+                            allowAddition
+                            index={storyIndex}
+                            onAdd={this.handleAddStoryGroup}
+                            onChange={this.handleMenuChange}
+                            nameAccessor='name'
+                            saving={saving}
                         />
-                    )}
-                    <ItemsBrowser
-                        data={storyGroups}
-                        allowAddition
-                        index={storyIndex}
-                        onAdd={this.handleAddStoryGroup}
-                        onChange={this.handleMenuChange}
-                        nameAccessor='name'
-                        saving={saving}
-                    />
-                </Grid.Column>
-                <Grid.Column width={12}>
-                    {storyGroups[storyIndex] ? (
-                        <StoriesEditor
-                            storyGroup={storyGroups[storyIndex]}
-                            onSaving={this.handleSavingStories}
-                            onSaved={this.handleSavedStories}
-                            onError={this.handleError}
-                            onErrorResolved={this.handleErrorResolved}
-                            onAddNewStory={this.handleNewStory}
-                            projectId={projectId}
-                            onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
-                            }
-                        />
-                    ) : (
-                        <Message content='select or create a story group' />
-                    )}
-                </Grid.Column>
+                    </Grid.Column>
+                    <Grid.Column width={12}>
+                        {storyGroups[storyIndex] ? (
+                            <StoriesEditor
+                                storyGroup={storyGroups[storyIndex]}
+                                onSaving={this.handleSavingStories}
+                                onSaved={this.handleSavedStories}
+                                onError={this.handleError}
+                                onErrorResolved={this.handleErrorResolved}
+                                onAddNewStory={this.handleNewStory}
+                                projectId={projectId}
+                                onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
+                                }
+                            />
+                        ) : (
+                            <Message content='select or create a story group' />
+                        )}
+                    </Grid.Column>
+                </DragDropContext>
             </Grid>
         );
     }
