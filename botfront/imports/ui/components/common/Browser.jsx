@@ -1,6 +1,7 @@
 import {
-    Menu, Icon, Input, Loader,
+    Menu, Icon, Input, Loader, Ref,
 } from 'semantic-ui-react';
+// import { useDrop } from 'react-dnd-cjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -40,6 +41,23 @@ class Browser extends React.Component {
         this.setState({ addMode: false, newItemName: '' });
     };
 
+    MenuItem = ({
+        item, index, nameAccessor, saving, indexProp,
+    }) => (
+        <Ref>
+            <Menu.Item
+                key={index.toString()}
+                name={item[nameAccessor]}
+                active={indexProp === index}
+                onClick={() => this.handleClickMenuItem(index)}
+                link={indexProp !== index}
+            >
+                <span>{item[nameAccessor]}</span>
+                {indexProp === index && saving && <Loader active size='tiny' />}
+            </Menu.Item>
+        </Ref>
+    );
+
     render() {
         const {
             data,
@@ -53,18 +71,15 @@ class Browser extends React.Component {
         const { addMode, newItemName, page } = this.state;
 
         const items = data.map((item, index) => (
-            <Menu.Item
-                key={index.toString()}
-                name={item[nameAccessor]}
-                active={indexProp === index}
-                onClick={() => this.handleClickMenuItem(index)}
-                link={indexProp !== index}
-            >
-                <span>{item[nameAccessor]}</span>
-                {indexProp === index && saving && (
-                    <Loader active size='tiny' />
-                )}
-            </Menu.Item>
+            <this.MenuItem
+                {...{
+                    item,
+                    index,
+                    nameAccessor,
+                    saving,
+                    indexProp,
+                }}
+            />
         ));
 
         if (allowAddition) {

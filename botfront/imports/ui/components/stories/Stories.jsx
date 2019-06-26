@@ -1,5 +1,6 @@
-import { DragDropContext } from 'react-beautiful-dnd';
+import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import { Grid, Message } from 'semantic-ui-react';
+import { DndProvider } from 'react-dnd-cjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -64,10 +65,6 @@ class Stories extends React.Component {
         });
     };
 
-    handleDragEnd = (result) => {
-        console.log(result);
-    }
-
     handleSavingStories = () => {
         this.setState({ saving: true });
     };
@@ -112,7 +109,9 @@ class Stories extends React.Component {
         const { storyIndex, saving, validationErrors } = this.state;
         return (
             <Grid className='stories-container'>
-                <DragDropContext onDragEnd={this.handleDragEnd}>
+                <DndProvider
+                    backend={HTML5Backend}
+                >
                     <Grid.Column width={4}>
                         {validationErrors && (
                             <Message
@@ -147,7 +146,7 @@ class Stories extends React.Component {
                             <Message content='select or create a story group' />
                         )}
                     </Grid.Column>
-                </DragDropContext>
+                </DndProvider>
             </Grid>
         );
     }
