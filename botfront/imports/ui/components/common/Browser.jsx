@@ -1,7 +1,6 @@
 import {
-    Menu, Icon, Input, Loader, Ref,
+    Menu, Icon, Input, Loader,
 } from 'semantic-ui-react';
-// import { useDrop } from 'react-dnd-cjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -44,18 +43,16 @@ class Browser extends React.Component {
     MenuItem = ({
         item, index, nameAccessor, saving, indexProp,
     }) => (
-        <Ref>
-            <Menu.Item
-                key={index.toString()}
-                name={item[nameAccessor]}
-                active={indexProp === index}
-                onClick={() => this.handleClickMenuItem(index)}
-                link={indexProp !== index}
-            >
-                <span>{item[nameAccessor]}</span>
-                {indexProp === index && saving && <Loader active size='tiny' />}
-            </Menu.Item>
-        </Ref>
+        <Menu.Item
+            key={index.toString()}
+            name={item[nameAccessor]}
+            active={indexProp === index}
+            onClick={() => this.handleClickMenuItem(index)}
+            link={indexProp !== index}
+        >
+            <span>{item[nameAccessor]}</span>
+            {indexProp === index && saving && <Loader active size='tiny' />}
+        </Menu.Item>
     );
 
     render() {

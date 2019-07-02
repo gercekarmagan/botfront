@@ -1,6 +1,4 @@
-import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import { Grid, Message } from 'semantic-ui-react';
-import { DndProvider } from 'react-dnd-cjs';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -109,44 +107,40 @@ class Stories extends React.Component {
         const { storyIndex, saving, validationErrors } = this.state;
         return (
             <Grid className='stories-container'>
-                <DndProvider
-                    backend={HTML5Backend}
-                >
-                    <Grid.Column width={4}>
-                        {validationErrors && (
-                            <Message
-                                warning
-                                content="Your changes haven't been saved. Correct errors first."
-                            />
-                        )}
-                        <ItemsBrowser
-                            data={storyGroups}
-                            allowAddition
-                            index={storyIndex}
-                            onAdd={this.handleAddStoryGroup}
-                            onChange={this.handleMenuChange}
-                            nameAccessor='name'
-                            saving={saving}
+                <Grid.Column width={4}>
+                    {validationErrors && (
+                        <Message
+                            warning
+                            content="Your changes haven't been saved. Correct errors first."
                         />
-                    </Grid.Column>
-                    <Grid.Column width={12}>
-                        {storyGroups[storyIndex] ? (
-                            <StoriesEditor
-                                storyGroup={storyGroups[storyIndex]}
-                                onSaving={this.handleSavingStories}
-                                onSaved={this.handleSavedStories}
-                                onError={this.handleError}
-                                onErrorResolved={this.handleErrorResolved}
-                                onAddNewStory={this.handleNewStory}
-                                projectId={projectId}
-                                onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
-                                }
-                            />
-                        ) : (
-                            <Message content='select or create a story group' />
-                        )}
-                    </Grid.Column>
-                </DndProvider>
+                    )}
+                    <ItemsBrowser
+                        data={storyGroups}
+                        allowAddition
+                        index={storyIndex}
+                        onAdd={this.handleAddStoryGroup}
+                        onChange={this.handleMenuChange}
+                        nameAccessor='name'
+                        saving={saving}
+                    />
+                </Grid.Column>
+                <Grid.Column width={12}>
+                    {storyGroups[storyIndex] ? (
+                        <StoriesEditor
+                            storyGroup={storyGroups[storyIndex]}
+                            onSaving={this.handleSavingStories}
+                            onSaved={this.handleSavedStories}
+                            onError={this.handleError}
+                            onErrorResolved={this.handleErrorResolved}
+                            onAddNewStory={this.handleNewStory}
+                            projectId={projectId}
+                            onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
+                            }
+                        />
+                    ) : (
+                        <Message content='select or create a story group' />
+                    )}
+                </Grid.Column>
             </Grid>
         );
     }
