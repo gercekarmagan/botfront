@@ -30,14 +30,6 @@
     margin-top: 1em;
   }
 
-  .segment {
-    .icon.trash {
-      position: absolute;
-      right: 10px;
-      top: 15px;
-    }
-  }
-
   .warning.message {
     animation-name: warningPopup;
     animation-duration: 0.2s;
@@ -48,6 +40,15 @@
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .story-editor {
+    margin-bottom: 20px;
+
+    //removes borders b/w menu items
+    .item::before{
+      width: 0;
+    }
   }
 }
 

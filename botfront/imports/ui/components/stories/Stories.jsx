@@ -32,10 +32,11 @@ class Stories extends React.Component {
                         validationErrors: false,
                     });
                     Meteor.call('stories.insert', {
-                        story: `## ${name}`,
+                        story: ' ',
+                        title: 'name',
                         storyGroupId: groupId,
                         projectId,
-                    });
+                    }, wrapMeteorCallback());
                 }
             }),
         );
@@ -79,13 +80,14 @@ class Stories extends React.Component {
         this.setState({ validationErrors: false });
     };
 
-    handleNewStory = () => {
+    handleNewStory = (indexOfNewStory) => {
         const { projectId, storyGroups } = this.props;
         const { storyIndex } = this.state;
         Meteor.call(
             'stories.insert',
             {
-                story: `## ${storyGroups[storyIndex].name}`,
+                story: ' ',
+                title: `${storyGroups[storyIndex].name} ${indexOfNewStory}`,
                 projectId,
                 storyGroupId: storyGroups[storyIndex]._id,
             },
@@ -136,6 +138,7 @@ class Stories extends React.Component {
                             projectId={projectId}
                             onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
                             }
+                            groupNames={storyGroups.map(group => group.name)}
                         />
                     ) : (
                         <Message content='select or create a story group' />
