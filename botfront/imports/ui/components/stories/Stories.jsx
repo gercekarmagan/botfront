@@ -19,6 +19,7 @@ class Stories extends React.Component {
 
     handleAddStoryGroup = async (name) => {
         const { projectId, storyGroups } = this.props;
+        const { storyIndex } = this.state;
         Meteor.call(
             'storyGroups.insert',
             {
@@ -31,12 +32,16 @@ class Stories extends React.Component {
                         storyIndex: storyGroups.length,
                         validationErrors: false,
                     });
-                    Meteor.call('stories.insert', {
-                        story: '* replace_with_intent',
-                        title: 'name',
-                        storyGroupId: groupId,
-                        projectId,
-                    }, wrapMeteorCallback());
+                    Meteor.call(
+                        'stories.insert',
+                        {
+                            story: '* replace_with_intent',
+                            title: storyGroups[storyIndex].name,
+                            storyGroupId: groupId,
+                            projectId,
+                        },
+                        wrapMeteorCallback(),
+                    );
                 }
             }),
         );
@@ -138,7 +143,10 @@ class Stories extends React.Component {
                             projectId={projectId}
                             onDeleteGroup={() => this.handleDeleteGroup(storyIndex)
                             }
-                            groupNames={storyGroups.map(group => ({ text: group.name, value: group._id }))}
+                            groupNames={storyGroups.map(group => ({
+                                text: group.name,
+                                value: group._id,
+                            }))}
                         />
                     ) : (
                         <Message content='select or create a story group' />
