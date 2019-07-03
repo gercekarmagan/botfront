@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { StoryGroups } from './storyGroups.collection';
+import { Stories } from '../story/stories.collection';
 
 export const createIntroStoryGroup = (projectId) => {
     if (!Meteor.isServer) throw Meteor.Error(401, 'Not Authorized');
@@ -41,3 +42,12 @@ Meteor.methods({
         return StoryGroups.update({ _id: storyGroup._id }, { $set: storyGroup });
     },
 });
+
+if (Meteor.isServer) {
+    Meteor.publish('introStory', function (projectId) {
+        check(projectId, String);
+        // Find the introStory Group, and send the first story from the group
+        const { _id: introStoryGroupId } = StoryGroups.findOne({ introStory: true, projectId }, { fields: { _id: 1 } });
+        return Stories.find({ storyGroupId: introStoryGroupId });
+    });
+}
